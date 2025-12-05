@@ -140,43 +140,55 @@ def choose_number_for_student(student_id):
     setting = Setting.query.first()
     max_number = setting.max_number if setting else 100
     numbers = list(range(1, max_number + 1))
-    answered = session.get("answered_numbers", [])
-    number_cards = [{"number": n, "answered": n in answered} for n in numbers]
+
+    # Ensure answered_numbers exists and is a dict
+    answered = session.get("answered_numbers")
+    if not isinstance(answered, dict):
+        answered = {}
+
+    number_cards = []
+    for n in numbers:
+        status = answered.get(str(n))  # 'pending', 'correct', 'incorrect'
+        number_cards.append({"number": n, "status": status})
+
     return render_template("choose_number.html", student=student, number_cards=number_cards)
 
 @app.route("/start_quiz/<int:student_id>/<int:number>")
 def start_quiz(student_id, number):
     student = Student.query.get_or_404(student_id)
-    session["current_student_id"] = student.id
-    session["quiz_number"] = number
-    session["answered_numbers"] = session.get("answered_numbers", [])
-    if number not in session["answered_numbers"]:
-        session["answered_numbers"].append(number)
+
+    if "answered_numbers" not in session or not isinstance(session.get("answered_numbers"), dict):
+        session["answered_numbers"] = {}
+
+    session["answered_numbers"][str(number)] = "pending"
+    session.modified = True
+
     return redirect(url_for("spell_word", student_id=student.id, number=number))
 
 @app.route("/spell_word/<int:student_id>/<int:number>", methods=["GET", "POST"])
 def spell_word(student_id, number):
     student = Student.query.get_or_404(student_id)
-    
-    # Example word logic
+
+    if "answered_numbers" not in session or not isinstance(session.get("answered_numbers"), dict):
+        session["answered_numbers"] = {}
+
     word_list = ["apple", "banana", "cherry", "date", "elephant"]
     total_words = len(word_list)
     word_index = (number - 1) % total_words
     word = word_list[word_index]
-
-    position = 1  # you can calculate based on points or order
+    position = 1
 
     if request.method == "POST":
         typed_word = request.form.get("typed_word", "").strip()
         result = request.form.get("result")
 
         if result == "correct":
-            # Add point for student
             student.points += 1
             db.session.commit()
             flash(f"{student.name} answered correctly! +1 point", "success")
+            session["answered_numbers"][str(number)] = "correct"
+            return redirect(url_for("select_student"))
         else:
-            # Move student to eliminated table
             eliminated = EliminatedStudent(
                 name=student.name,
                 school=student.school,
@@ -186,10 +198,12 @@ def spell_word(student_id, number):
             db.session.delete(student)
             db.session.commit()
             flash(f"{student.name} is eliminated!", "error")
+            session["answered_numbers"][str(number)] = "incorrect"
+            session.modified = True
             return redirect(url_for("select_student"))
 
-        # Redirect to choose number again or next word
-        return redirect(url_for("select_student"))
+        session.modified = True
+        return redirect(url_for("choose_number_for_student", student_id=student.id))
 
     return render_template(
         "spell_word.html",
@@ -200,8 +214,36 @@ def spell_word(student_id, number):
         position=position
     )
 
+
+# -----------------------
+# Overall Results
+# -----------------------
+@app.route("/overall_results")
+def overall_results():
+    # Get all students sorted by points descending
+    students = Student.query.order_by(Student.points.desc(), Student.name.asc()).all()
+
+    # Prepare table data
+    # 'total' can be number of answered numbers from session
+    answered_numbers = session.get("answered_numbers", {})
+
+    table_data = []
+    for s in students:
+        # Count how many numbers the student attempted
+        # If session tracks per student, you may need a more complex structure
+        total_attempted = sum(1 for key, status in answered_numbers.items() if status in ["correct", "incorrect"])
+        table_data.append({
+            "name": s.name,
+            "school": s.school,
+            "points": s.points,
+            "total": total_attempted
+        })
+
+    return render_template("overall_result.html", table_data=table_data)
+
+
 # -----------------------
 # Run Server
 # -----------------------
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
