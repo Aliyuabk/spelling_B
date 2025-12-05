@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Competition End</title>
+<link rel="stylesheet" href="/static/student.css">
+</head>
+<body>
+<div class="container">
+<h1>Competition Finished!</h1>
+
+{% if remaining %}
+<p>Winner(s):</p>
+<ul>
+{% for s in remaining %}
+<li>{{ s.name }} - {{ s.school }}</li>
+{% endfor %}
+</ul>
+{% else %}
+<p>No students remaining. Competition ended.</p>
+{% endif %}
+</div>
+</body>
+</html>

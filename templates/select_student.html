@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Select Student</title>
+<style>
+body { font-family:sans-serif; background:#0f172a; color:#f8fafc; margin:0; padding:20px;}
+h1{ text-align:center; margin-bottom:20px; }
+.student-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:15px; }
+.student-card { background:#1e293b; padding:15px; border-radius:10px; cursor:pointer; text-align:center; transition:all 0.2s; }
+.student-card:hover { background:#3b82f6; }
+</style>
+</head>
+<body>
+<h1>Select a Student</h1>
+<div class="student-grid">
+{% for student in students %}
+    <div class="student-card" onclick="location.href='/choose_number/{{ student.id }}'">
+        <strong>{{ student.name }}</strong><br>{{ student.school }}
+    </div>
+{% endfor %}
+</div>
+</body>
+</html>

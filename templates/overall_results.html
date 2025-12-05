@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Overall Results</title>
+
+<style>
+body {
+    background: #f4f4f4;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Table Styling */
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.results-table th, .results-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.results-table th {
+    background: #111827;
+    color: white;
+}
+
+.results-table tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+/* Hover Effect */
+.results-table tr:hover {
+    background: #e5e7eb;
+}
+
+/* Row Animation */
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animated-row {
+    animation: fadeSlide 0.6s ease forwards;
+    opacity: 0;
+}
+
+/* Winner Colors */
+.first-place {
+    background: #65fa37 !important; /* Gold */
+    font-weight: bold;
+}
+
+.second-place {
+    background: #C0C0C0 !important; /* Silver */
+    font-weight: bold;
+}
+
+.third-place {
+    background: #CD7F32 !important; /* Bronze */
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Overall Spelling Bee Results</h2>
+
+    <table class="results-table">
+        <thead>
+            <tr>
+                <th>Position</th>
+                <th>Student Name</th>
+                <th>School</th>
+                <th>Total Points</th>
+                <th>Total Attempted</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for row in table_data %}
+            <tr class="animated-row 
+                {% if loop.index == 1 %}first-place
+                {% elif loop.index == 2 %}second-place
+                {% elif loop.index == 3 %}third-place
+                {% endif %}"
+                style="animation-delay: {{ loop.index * 0.2 }}s">
+
+                <td>{{ loop.index }}</td>
+                <td>{{ row.name }}</td>
+                <td>{{ row.school }}</td>
+                <td>{{ row.points }}</td>
+                <td>{{ row.total }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

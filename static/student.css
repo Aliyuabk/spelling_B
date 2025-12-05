@@ -1,0 +1,215 @@
+/* ------------------------------------------
+   PROFESSIONAL SPELLING BEE UI (FULL STYLE)
+   Projector-Friendly • Clean • Bold • Modern
+------------------------------------------- */
+
+/* Global */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to bottom right, #0f172a, #1e293b);
+    margin: 0;
+    padding: 0;
+    color: #f8fafc;
+}
+
+/* Title */
+h1 {
+    text-align: center;
+    margin-top: 25px;
+    color: #f8fafc;
+    font-size: 2.4rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Layout */
+.two-column {
+    display: flex;
+    gap: 30px;
+    padding: 20px 40px;
+    margin-top: 20px;
+}
+
+.left-column,
+.right-column {
+    flex: 1;
+}
+
+/* ------------------------------------------
+   STUDENT CARDS (4 per row)
+------------------------------------------- */
+
+.student-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);  /* FOUR PER ROW */
+    gap: 16px;
+}
+
+.student-card {
+    background: #1e293b;
+    padding: 18px;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    text-align: center;
+    cursor: pointer;
+    transition: transform .2s, border .2s, background .2s;
+    font-size: 1.1rem;
+    color: #f8fafc;
+}
+
+.student-card:hover {
+    transform: scale(1.05);
+    border-color: #3b82f6;
+}
+
+.student-card.selected {
+    background: #3b82f6;
+    border-color: #60a5fa;
+    color: white;
+}
+
+/* ------------------------------------------
+   NUMBER CARDS
+------------------------------------------- */
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    gap: 14px;
+    margin-top: 10px;
+}
+
+.number-card {
+    height: 70px;
+    background: #334155;
+    border-radius: 14px;
+    color: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: transform .2s, background .2s;
+}
+
+.number-card:hover {
+    background: #475569;
+    transform: scale(1.10);
+}
+
+.number-card.answered {
+    background: #10b981;
+    color: white;
+}
+
+.number-card.answered:hover {
+    transform: none;
+}
+
+/* ------------------------------------------
+   SPELL WORD SCREEN
+------------------------------------------- */
+
+.spell-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px 40px;
+    background: #1e293b;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.spell-container h2 {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.big-word {
+    font-size: 3rem;
+    margin-top: 20px;
+    font-weight: 700;
+    color: #38bdf8;
+}
+
+/* Buttons */
+button {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    background: #3b82f6;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin: 12px;
+    transition: background .2s, transform .2s;
+}
+
+button:hover {
+    background: #2563eb;
+    transform: scale(1.05);
+}
+
+/* ------------------------------------------
+   RESULTS TABLE
+------------------------------------------- */
+
+table {
+    width: 90%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    font-size: 1.2rem;
+}
+
+th {
+    background: #3b82f6;
+    color: white;
+    padding: 14px;
+}
+
+td {
+    background: #1e293b;
+    padding: 14px;
+    border-bottom: 1px solid #334155;
+}
+
+tr:nth-child(even) td {
+    background: #273449;
+}
+
+tr.eliminated td {
+    color: #ef4444;
+    font-weight: bold;
+}
+
+tr.remaining td {
+    color: #10b981;
+    font-weight: bold;
+}
+
+/* ------------------------------------------
+   RESPONSIVE
+------------------------------------------- */
+
+/* Medium screens – 3 per row */
+@media (max-width: 1024px) {
+    .student-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Tablet – 2 per row */
+@media (max-width: 768px) {
+    .student-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile – 1 per row */
+@media (max-width: 480px) {
+    .student-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}

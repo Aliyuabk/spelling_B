@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Round Result</title>
+<link rel="stylesheet" href="/static/student.css">
+</head>
+<body>
+<div class="container">
+<h1>Round Result</h1>
+
+<h2>Eliminated Students</h2>
+<table>
+<tr><th>Name</th><th>School</th></tr>
+{% for s in eliminated %}
+<tr class="eliminated">
+<td>{{ s.name }}</td>
+<td>{{ s.school }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<h2>Remaining Students</h2>
+<table>
+<tr><th>Name</th><th>School</th></tr>
+{% for s in remaining %}
+<tr class="remaining">
+<td>{{ s.name }}</td>
+<td>{{ s.school }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<form action="{{ url_for('rounds') }}">
+<button type="submit">Start Next Round</button>
+</form>
+</div>
+</body>
+</html>

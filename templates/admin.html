@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Students & Settings</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Admin Panel</h1>
+        <p class="muted">Manage students and quiz settings.</p>
+    </header>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flashes">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Quiz settings -->
+    <section class="panel show">
+        <h2>Quiz Settings</h2>
+        <form method="POST" action="{{ url_for('update_max_number') }}" class="form-container">
+            <input type="number" name="max_number" value="{{ max_number }}" min="1" required>
+            <button type="submit">Save Max Number</button>
+        </form>
+    </section>
+<!-- Add multiple students via CSV -->
+<section class="panel">
+    <h2>Add Multiple Students (CSV)</h2>
+    <form method="POST" action="{{ url_for('upload_csv') }}" class="form-container" enctype="multipart/form-data">
+        <input type="file" name="csv_file" accept=".csv" required>
+        <button type="submit">Upload CSV</button>
+    </form>
+    <p class="muted">CSV format: name,school,points (points optional, default 0)</p>
+</section>
+
+    <!-- Add student -->
+    <section class="panel">
+        <h2>Add Student</h2>
+        <form method="POST" action="{{ url_for('add_student') }}" class="form-container">
+            <input type="text" name="name" placeholder="Student name" required>
+            <input type="text" name="school" placeholder="School" required>
+            <input type="number" name="points" placeholder="Points" value="0" required>
+            <button type="submit">Add Student</button>
+        </form>
+    </section>
+
+    <!-- Students table -->
+    <section class="panel">
+        <h2>Students</h2>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>School</th>
+                        <th>Points</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for s in students %}
+                    <tr>
+                        <td>{{ s.id }}</td>
+                        <td>{{ s.name }}</td>
+                        <td>{{ s.school }}</td>
+                        <td>{{ s.points }}</td>
+                        <td>
+                            <form method="post" action="{{ url_for('delete_student', student_id=s.id) }}" onsubmit="return confirm('Delete this student?');">
+                                <button type="submit" class="link-btn delete">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="5" class="muted">No students yet.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer>
+        <small class="muted">Spelling Bee Admin Panel</small>
+    </footer>
+</div>
+</body>
+</html>

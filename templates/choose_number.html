@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Choose Number — {{ student.name }}</title>
+<style>
+body { font-family:sans-serif; background:#0f172a; color:#f8fafc; margin:0; padding:20px; }
+h1 { text-align:center; margin-bottom:10px; }
+.student-info { text-align:center; margin-bottom:20px; font-size:1.2rem; color:#cbd5e1; }
+
+.number-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(60px,1fr));
+    gap:8px;
+    max-width:1200px;
+    margin:20px auto;
+}
+.number-card {
+    background:#1e293b;
+    padding:20px;
+    border-radius:8px;
+    text-align:center;
+    font-weight:700;
+    font-size:1.2rem;
+    cursor:pointer;
+    transition:all 0.2s;
+}
+.number-card:hover { background:#3b82f6; }
+
+.number-card.correct { background:#10b981; color:white; cursor:not-allowed; }
+.number-card.incorrect { background:#ef4444; color:white; cursor:not-allowed; }
+.number-card.answered { background:#374151; color:#9ca3af; cursor:not-allowed; }
+
+</style>
+</head>
+<body>
+
+<h1>Choose Number</h1>
+<div class="student-info">
+    <strong>Student:</strong> {{ student.name }} <br>
+    <strong>School:</strong> {{ student.school }}
+</div>
+
+<div class="number-grid">
+{% for n in number_cards %}
+    <div class="number-card 
+        {% if n.status == 'correct' %}correct{% elif n.status == 'incorrect' %}incorrect{% elif n.status %}answered{% endif %}" 
+        {% if not n.status %}onclick="selectNumber({{ n.number }})"{% endif %}>
+        {{ n.number }}
+    </div>
+{% endfor %}
+</div>
+
+<script>
+function selectNumber(number){
+    window.location.href = `/spell_word/{{ student.id }}/` + number;
+}
+</script>
+
+</body>
+</html>

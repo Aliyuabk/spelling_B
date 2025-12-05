@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spell the Word — Projector View</title>
+<style>
+/* --- General Styles --- */
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #1f2937; /* Dark background for high contrast */
+    color: #f8fafc;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 40px;
+    background: #111827;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* --- Student Info Card --- */
+.student-card {
+    display: flex;
+    justify-content: space-between;
+    background: linear-gradient(90deg, #3b82f6, #6366f1);
+    padding: 30px 40px;
+    border-radius: 16px;
+    color: white;
+    margin-bottom: 40px;
+    align-items: center;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    font-size: 2rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.student-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+}
+
+.student-card div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.student-card div span {
+    font-weight: 700;
+}
+
+/* --- Word Display --- */
+.word-container {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.word-container h3 {
+    font-size: 2rem;
+    color: #e5e7eb;
+    margin-bottom: 10px;
+}
+
+.word-container h2 {
+    font-size: 5rem;
+    color: #facc15;
+    margin: 0;
+    letter-spacing: 5px;
+}
+
+/* --- Typing Input --- */
+input[type="text"] {
+    width: 100%;
+    padding: 25px;
+    font-size: 4rem;
+    border-radius: 16px;
+    border: 2px solid #374151;
+    outline: none;
+    margin-bottom: 40px;
+    box-shadow: inset 0 4px 10px rgba(0,0,0,0.2);
+    background: #1f2937;
+    color: #f8fafc;
+    text-align: center;
+}
+
+input:focus {
+    border-color: #facc15;
+    box-shadow: 0 0 20px rgba(250,204,21,0.5);
+}
+
+/* --- Buttons --- */
+button {
+    padding: 20px 50px;
+    font-weight: 700;
+    border-radius: 16px;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+    font-size: 2rem;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.correct {
+    background: #10b981;
+    color: white;
+}
+
+.correct:hover {
+    background: #059669;
+    transform: scale(1.05);
+}
+
+.incorrect {
+    background: #ef4444;
+    color: white;
+}
+
+.incorrect:hover {
+    background: #b91c1c;
+    transform: scale(1.05);
+}
+
+/* --- Responsive for Large Projector Screens --- */
+@media (max-width: 1200px) {
+    .student-card { font-size: 1.5rem; padding: 20px; }
+    .word-container h2 { font-size: 4rem; }
+    input[type="text"] { font-size: 3rem; padding: 20px; }
+    button { font-size: 1.5rem; padding: 15px 40px; }
+}
+
+@media (max-width: 768px) {
+    .container { padding: 20px; }
+    .student-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+    .word-container h2 { font-size: 3rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Student Info Card -->
+    <div class="student-card">
+        <div>
+            <span>Name:</span> {{ student.name }}
+            <span>School:</span> {{ student.school }}
+        </div>
+        <div style="text-align:right;">
+            <span>Points:</span> {{ student.points }}
+            <!-- <span>Position:</span> {{ position }} -->
+        </div>
+    </div>
+
+    <!-- Word Display -->
+    <!-- <div class="word-container">
+        <h3>Word {{ word_number }} of {{ total }}</h3>
+        <h2>{{ word }}</h2>
+    </div> -->
+
+    <!-- Typing Input and Buttons -->
+    <form method="POST">
+        <input type="text" name="typed_word" placeholder="Type the word here..." autofocus required autocomplete="off">
+        <div style="text-align:center;">
+            <button type="submit" name="result" value="correct" class="correct">Correct</button>
+            <button type="submit" name="result" value="incorrect" class="incorrect">Incorrect</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
